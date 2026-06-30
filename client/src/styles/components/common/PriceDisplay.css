@@ -1,0 +1,47 @@
+.price-display {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.price-discount-badge {
+  background: var(--color-discount-bg);
+  color: var(--color-discount);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-bold);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.price-values {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.price-old {
+  color: var(--color-price-old);
+  text-decoration: line-through;
+  font-size: var(--text-sm);
+}
+
+.price-current {
+  color: var(--color-price-new);
+  font-weight: var(--font-bold);
+}
+
+/* Sizes */
+.price-sm .price-discount-badge { font-size: 10px; padding: 1px 6px; }
+.price-sm .price-old { font-size: var(--text-xs); }
+.price-sm .price-current { font-size: var(--text-sm); }
+
+.price-md .price-current { font-size: var(--text-base); }
+
+.price-lg .price-discount-badge { font-size: var(--text-sm); padding: 4px 10px; }
+.price-lg .price-old { font-size: var(--text-base); }
+.price-lg .price-current { font-size: var(--text-xl); }
+
+.price-xl .price-discount-badge { font-size: var(--text-base); padding: 4px 12px; }
+.price-xl .price-old { font-size: var(--text-lg); }
+.price-xl .price-current { font-size: var(--text-2xl); }

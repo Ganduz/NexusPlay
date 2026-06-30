@@ -1,0 +1,50 @@
+.game-carousel {
+  margin-bottom: var(--space-10);
+}
+
+.game-carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.game-carousel-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+.game-carousel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  transition: gap var(--transition-fast);
+}
+
+.game-carousel-link:hover {
+  gap: var(--space-3);
+}
+
+.game-carousel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .game-carousel-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+}
+
+@media (max-width: 400px) {
+  .game-carousel-grid {
+    grid-template-columns: 1fr;
+  }
+}

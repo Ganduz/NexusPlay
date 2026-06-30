@@ -1,0 +1,89 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.badge--sm {
+  padding: 3px 8px;
+  font-size: 0.7rem;
+}
+.badge--md {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+}
+.badge--lg {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.badge--default {
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+}
+
+.badge--accent {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--accent-primary);
+}
+
+.badge--success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.badge--warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.badge--danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.badge--discount {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  font-weight: 700;
+}
+
+.badge--pc {
+  background: rgba(74, 144, 217, 0.15);
+  color: var(--platform-pc);
+}
+
+.badge--playstation {
+  background: rgba(0, 112, 209, 0.15);
+  color: var(--platform-ps5);
+}
+
+.badge--xbox {
+  background: rgba(16, 124, 16, 0.15);
+  color: var(--platform-xbox);
+}
+
+.badge--nintendo {
+  background: rgba(228, 0, 15, 0.15);
+  color: var(--platform-switch);
+}
+
+.badge--new {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(147, 51, 234, 0.15));
+  color: #a78bfa;
+}
+
+.badge--preorder {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.badge--trending {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}

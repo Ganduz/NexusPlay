@@ -1,0 +1,33 @@
+.order-confirm-page { padding-top: var(--space-12); padding-bottom: var(--space-16); max-width: 700px; }
+.order-confirm-header { text-align: center; margin-bottom: var(--space-10); }
+.order-confirm-icon { font-size: 64px; color: var(--color-success); margin-bottom: var(--space-4); }
+.order-confirm-header h1 { font-family: var(--font-heading); font-size: var(--text-4xl); margin-bottom: var(--space-2); }
+.order-confirm-header p { color: var(--text-secondary); margin-bottom: var(--space-3); }
+.order-confirm-number { font-family: var(--font-mono); color: var(--accent-primary); font-size: var(--text-lg); }
+
+.order-confirm-items { background: var(--surface-primary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-4); }
+.order-confirm-items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4); }
+.order-confirm-items-header h3 { font-family: var(--font-heading); font-size: var(--text-lg); margin-bottom: 0; }
+.order-confirm-toggle { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-4); background: var(--surface-secondary); color: var(--text-secondary); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: var(--font-medium); transition: all var(--transition-fast); }
+.order-confirm-toggle:hover { background: var(--accent-primary); color: white; }
+.order-confirm-item { padding: var(--space-4) 0; border-bottom: 1px solid var(--border-color); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.order-confirm-item:last-child { border-bottom: none; }
+.order-confirm-item-info { flex: 1; min-width: 200px; }
+.order-confirm-item-name { display: block; font-weight: var(--font-semibold); }
+.order-confirm-item-meta { font-size: var(--text-xs); color: var(--text-muted); }
+.order-confirm-item-qty { flex-shrink: 0; display: flex; align-items: center; }
+.order-confirm-item-qty-badge { font-size: var(--text-xs); color: var(--text-muted); background: var(--surface-secondary); padding: 2px 10px; border-radius: var(--radius-full); font-weight: var(--font-medium); }
+.order-confirm-item-keys { display: flex; flex-direction: column; gap: var(--space-1); width: 100%; }
+.order-confirm-item-key { display: flex; align-items: center; gap: var(--space-2); color: var(--accent-primary); font-size: var(--text-sm); }
+.order-confirm-item-key.masked { opacity: 0.5; }
+.order-confirm-item-key.masked code { color: var(--text-muted); }
+.order-confirm-item-key code { font-family: var(--font-mono); background: var(--bg-primary); padding: 4px 8px; border-radius: var(--radius-sm); letter-spacing: 1px; }
+.order-confirm-item-price { font-weight: var(--font-bold); color: var(--color-discount); }
+
+.order-confirm-total { display: flex; justify-content: space-between; padding: var(--space-4) var(--space-6); background: var(--surface-primary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); font-size: var(--text-xl); font-weight: var(--font-bold); margin-bottom: var(--space-6); }
+
+.order-confirm-actions { display: flex; gap: var(--space-3); justify-content: center; }
+.order-confirm-btn { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-6); background: var(--accent-primary); color: white; border-radius: var(--radius-md); font-weight: var(--font-semibold); transition: background var(--transition-fast); }
+.order-confirm-btn:hover { background: var(--accent-hover); color: white; }
+.order-confirm-btn-secondary { padding: var(--space-3) var(--space-6); background: var(--surface-secondary); color: var(--text-secondary); border-radius: var(--radius-md); font-weight: var(--font-medium); transition: all var(--transition-fast); }
+.order-confirm-btn-secondary:hover { color: var(--text-primary); }
