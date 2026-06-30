@@ -1,84 +1,113 @@
 # NexusPlay
 
-Progetto Universitario Ecommerce Videogiochi sviluppato da Gandolfi Davide e Alex Medioli per il corso di Tecnologie Internet.
+## Progetto di Tecnologie Internet
 
-## Features
+**Corso:** Tecnologie Internet  
+**Sviluppatori:** Gandolfi Davide, Alex Medioli
 
-- **Authentication** — email/password registration & login, Google OAuth 2.0, JWT access + refresh token rotation
-- **Game Browsing** — homepage sections (featured, new releases, trending, pre-orders, best deals), detail pages with screenshots, trailers and series
-- **Search** — full-text search with platform, price range and sort filters; results from local DB enriched with RAWG metadata (images, ratings, genres)
-- **Cart** — localStorage for anonymous users, database-backed for logged-in users, automatic merge on login
-- **Checkout** — simulated payment flow (no real gateway), order confirmation with generated serial keys
-- **Order History** — paginated list with full order details
-- **Wishlist** — toggle games in/out, check status per game
-- **Reviews** — 1-5 star ratings with title and body, up/down voting, one review per user per game
-- **User Profiles** — avatar upload, bio, game library (purchased games), personal reviews dashboard
-- **Seed Data** — 24 games pre-loaded from the RAWG API across 4 platforms
+---
 
-<br>
+## Descrizione del Progetto
 
-| API                                                  | Purpose                                                                   |
-| ---------------------------------------------------- | ------------------------------------------------------------------------- |
-| [RAWG Video Games Database](https://rawg.io/apidocs) | Game metadata, screenshots, trailers (proxied through the Express server) |
+NexusPlay è una piattaforma web di e-commerce per videogiochi digitali. Consente agli utenti di navigare un catalogo di giochi, visualizzare dettagli (prezzi, piattaforme, edizioni, requisiti di sistema, screenshot e trailer), gestire una lista dei desideri, recensire e votare recensioni, aggiungere prodotti al carrello e completare ordini simulati con generazione di chiavi seriali.
 
-## Installation
+## Architettura Generale
 
-### 1. Clone the repository
+L'applicazione segue un'architettura **client-server** con separazione tra frontend e backend:
 
-```bash
-git clone https://github.com/<your-username>/nexusplay.git
-cd nexusplay
+- **Client** (`client/`): Sviluppato in React, Javascript e CSS.
+- **Server** (`server/`): Sviluppato in Node.js, Express, Database mariaDB(xampp).
+- **API Esterna**: RAWG Video Games Database API (metadati, screenshot, trailer).
+
+## Funzionalità
+
+- **Autenticazione** — registrazione e login con email/password
+- **Navigazione Giochi** — sezioni della homepage (in evidenza, nuove uscite, di tendenza, preordini, migliori offerte), pagine di dettaglio con screenshot, trailer e serie
+- **Ricerca** — ricerca full-text con filtri per piattaforma, fascia di prezzo e ordinamento; risultati dal database locale arricchiti con i metadati di RAWG (immagini, valutazioni, generi)
+- **Carrello** — localStorage per gli utenti anonimi, memorizzazione su database per gli utenti registrati, unione automatica al momento del login
+- **Pagamento (Checkout)** — flusso di pagamento simulato, conferma dell'ordine con generazione delle chiavi seriali
+- **Cronologia Ordini** — elenco ordini con tutti i dettagli
+- **Lista dei Desideri (Wishlist)** — aggiunta/rimozione dei giochi, verifica dello stato per singolo gioco
+- **Recensioni** — valutazioni da 1 a 5 stelle con titolo e testo, votazione utile/non utile (up/down voting), una sola recensione per utente per ciascun gioco
+- **Profili Utente** — caricamento dell'avatar, biografia, libreria dei giochi (giochi acquistati), bacheca delle recensioni personali
+
+## Database
+
+### Schema ER
+
+Il database è composto da **10 tabelle**:
+
+| Tabella          | Descrizione                                                                                   |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| `users`          | Utenti registrati (email, username, password_hash, avatar)                                    |
+| `games`          | Catalogo giochi con metadati locali (slug, nome, flag featured/new/trending/preorder)         |
+| `platforms`      | Piattaforme di gioco (PC, PS5, Xbox Series X\|S, Nintendo Switch)                             |
+| `game_editions`  | Edizioni per gioco (Standard, Deluxe, Ultimate)                                               |
+| `game_platforms` | Associazioni gioco-piattaforma-edizione con prezzo, sconto e `final_price` (colonna GENERATA) |
+| `cart_items`     | Carrello utente con quantità                                                                  |
+| `orders`         | Ordini completati con numero ordine univoco, totale, stato pagamento                          |
+| `order_items`    | Prodotti acquistati                                                                           |
+| `wishlist`       | Lista desideri utente-gioco                                                                   |
+| `reviews`        | Recensioni (1-5 stelle, titolo, corpo, flag edited)                                           |
+| `review_votes`   | Voti up/down sulle recensioni (toggle)                                                        |
+
+## Backend
+
+### Struttura
+
+```
+routes/      → Definizione endpoint (metodo + path + middleware)
+controllers/ → Gestione richieste HTTP (req/res)
+services/    → Logica di business complessa (ordini, RAWG, auth, cache)
+models/      → Data access layer (query SQL pure)
+middleware/  → Auth JWT, rate limiting, upload file, validazione, error handler
+validators/  → Regole express-validator
+utils/       → Classi helper
 ```
 
-### 2. Install dependencies
+### API Endpoints (alcuni)
 
-```bash
-# Client
-cd client
-npm install
+| Area         | Endpoint                                                                                                                                                                              |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Auth**     | `POST /api/auth/register`, `/login`, `/refresh`, `/logout`, `GET /me`                                                                                                                 |
+| **Games**    | `GET /api/games` (catalogo filtrato), `/homepage` (sezioni), `/search`, `/genres`, `/:slug` (dettaglio), `/:slug/screenshots`, `/:slug/trailers`, `/:slug/series`, `/:slug/platforms` |
+| **Cart**     | `GET /`, `POST /`, `DELETE /:itemId`, `DELETE /`, `POST /merge`                                                                                                                       |
+| **Orders**   | `POST /` (crea con transazione), `GET /` (storico), `GET /:id` (dettaglio)                                                                                                            |
+| **Wishlist** | `GET /`, `POST /:gameId` (toggle), `GET /check/:gameId`                                                                                                                               |
+| **Reviews**  | `GET /games/:slug/reviews`, `POST /games/:slug/reviews`, `PUT /reviews/:reviewId`, `DELETE /reviews/:reviewId`, `POST /reviews/:reviewId/vote`                                        |
+| **Profile**  | `GET /`, `PUT /`, `POST /avatar`, `GET /dashboard`, `GET /library`, `GET /reviews`                                                                                                    |
 
-# Server
-cd ../server
-npm install
+### Integrazione Esterna
+
+- **RAWG API**: recupero metadati (descrizioni, immagini, rating, generi, publisher, sviluppatori), screenshot, trailer
+
+## Frontend
+
+### Struttura
+
+```
+api/         → Funzioni Axios per ogni dominio (auth, games, cart, orders, profile, reviews, wishlist)
+components/  → Componenti riutilizzabili suddivisi per dominio (common/, game/, home/, profile/)
+pages/       → Componenti route-level (HomePage, GamePage, SearchPage, CartPage, CheckoutPage, ProfilePage, Auth)
+store/       → Stato globale con Zustand (authStore, cartStore, uiStore)
+hooks/       → Custom hook (useDebounce, useClickOutside)
+styles/      → CSS
+utils/       → Formattatori (prezzi €, date), costanti (piattaforme, opzioni ordinamento)
 ```
 
-### 3. Configure environment variables
+### Pagine
 
-Create a `.env` file inside `server/` then fill in the values
-<br>
-
-### 4. Create the database and run migrations
-
-```bash
-cd server
-npm run migrate
-```
-
-This executes `scripts/schema.sql` which creates the `nexusplay` database, all tables and seeds the platform lookup table.
-
-### 5. Seed the game catalogue
-
-```bash
-npm run seed
-```
-
-Inserts 24 games with editions, platforms and pricing pulled from `scripts/seedData.js`.
-
-### 6. Start the development servers
-
-Open **two terminals**:
-
-```bash
-# Terminal 1 — Server (port 5000)
-cd server
-npm run dev
-
-# Terminal 2 — Client (port 5173)
-cd client
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+| Pagina                       | Descrizione                                                                                         |
+| ---------------------------- | --------------------------------------------------------------------------------------------------- |
+| **HomePage**                 | Hero banner + sezioni Featured/New Releases/Trending/Preorders/Best Deals con PlatformTabs          |
+| **GamePage**                 | Dettaglio gioco: hero, selettore piattaforma/edizione, galleria multimediale, requisiti, recensioni |
+| **SearchPage**               | Ricerca con filtri (piattaforma, prezzo, ordinamento) e griglia risultati                           |
+| **CartPage**                 | Carrello con items, riepilogo prezzi, pulsante checkout                                             |
+| **CheckoutPage**             | Riepilogo ordine e pagamento simulato                                                               |
+| **OrderConfirmationPage**    | Conferma con serial keys                                                                            |
+| **ProfilePage**              | Dashboard, Libreria, Ordini, Recensioni, Wishlist, Impostazioni (tab)                               |
+| **LoginPage / RegisterPage** | Form autenticazione con merge carrello post-login                                                   |
+| **NotFoundPage**             | Pagina 404                                                                                          |
 
 ## Project Structure
 
@@ -88,7 +117,6 @@ nexusplay/
 │   ├── public/
 │   ├── src/
 │   │   ├── api/                # Axios instances & API helpers
-│   │   ├── assets/             # Static assets (images, fonts)
 │   │   ├── components/         # Reusable UI components
 │   │   │   ├── common/         #   Shared (Navbar, Footer, Loader…)
 │   │   │   ├── game/           #   Game cards, detail sections
@@ -102,15 +130,13 @@ nexusplay/
 │   │   ├── App.jsx             # Root component & router
 │   │   └── main.jsx            # Entry point
 │   ├── index.html
-│   ├── vite.config.js
-│   └── package.json
 │
 ├── server/                     # Express back-end
 │   ├── scripts/
 │   │   ├── schema.sql          # Database DDL
 │   │   ├── migrate.js          # Migration runner
 │   │   ├── seed.js             # Seed runner
-│   │   └── seedData.js         # 24 games seed data
+│   │   └── seedData.js         # seed data
 │   ├── src/
 │   │   ├── config/             # env, database pool, passport
 │   │   ├── controllers/        # Route handlers
@@ -118,15 +144,25 @@ nexusplay/
 │   │   ├── models/             # Raw SQL data-access layer
 │   │   ├── routes/             # Express routers
 │   │   ├── services/           # Business logic (auth, orders, RAWG, mail)
-│   │   ├── templates/          # Email HTML templates
 │   │   ├── utils/              # ApiError, asyncHandler
 │   │   ├── validators/         # express-validator rule sets
 │   │   ├── app.js              # Express app setup
 │   │   └── index.js            # Server entry point
 │   ├── uploads/                # User-uploaded files (avatars)
 │   ├── .env                    # Environment variables (not committed)
-│   └── package.json
 │
 │
 └── README.md
 ```
+
+## Installazione e Avvio
+
+1. Clonare il repository
+2. Installare dipendenze: `cd client && npm install` e `cd server && npm install`
+3. Configurare il file `.env` in `server/` (gia configurato)
+4. Creare database: `npm run migrate` (esegue `schema.sql`)
+5. Popolare con dati di esempio: `npm run seed` (giochi da RAWG)
+6. Avviare server: `npm run dev` (porta 5000)
+7. Avviare client: `npm run dev` (porta 5173)
+
+---
